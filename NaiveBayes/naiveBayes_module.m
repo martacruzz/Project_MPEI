@@ -65,7 +65,7 @@ disp("--------------------------")
 
 
 % test password
-test_password = "idk123@";
+test_password = "[strP4ssw0rd!@";
 allChars_test = strjoin(test_password, '');
 chars_test = unique(char(allChars_test));
 
@@ -136,8 +136,3 @@ if (nbc_compromised > nbc_strong)
 else
     disp("Good job, you have a strong password. It is most likely not compromised")
 end
-
-
-
-% CHECK FOR CHARS THAT ARE NOT ON PRACTICE SET (like spanish question mark
-% or smt)
