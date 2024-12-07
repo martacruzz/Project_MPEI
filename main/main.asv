@@ -1,0 +1,26 @@
+% this script holds the main implementation of the 3 methods developed for
+% a Compromised Password Checker.
+
+load BloomFilter.mat
+
+%% fetch the password from user input
+userPassword = input('Enter your password: ', 's');
+
+%% apply Bloom filter to check if password inputted is in compromised passwords. if so -> mark it as compromised immediatly
+k = 10;
+bloomfilterResult = is_in_BloomFilter(BloomFilter, userPassword, k);
+
+if bloomfilterResult == 1
+   
+    disp('Your password is compromised! Better change it now.')
+    return
+    
+end
+
+%% if not -> apply Naive Bayes to check the probability of password being compromised
+
+
+%% and apply MinHash to see if any similarities are found
+userPassword = convertCharsToStrings(userPassword); % convert array of chars to string
+
+%% based on the classifier and the number of similarities generate an output -> compromised or strong password

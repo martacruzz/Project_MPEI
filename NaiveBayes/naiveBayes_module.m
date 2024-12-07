@@ -63,6 +63,7 @@ fprintf("P(compromised) = %.4f\n", p_compromised)
 fprintf("P(strong) = %.4f\n", p_strong)
 disp("--------------------------")
 
+save('trainedNaiveBayes.mat', 'chars', 'chars_compromised', 'chars_strong', 'p_compromised', 'p_strong', 'occurences_compromised', 'occurences_strong')
 
 % test password
 test_password = "[strP4ssw0rd@";
@@ -117,14 +118,14 @@ end
 
 disp("--------------------------")
 
-% calculation of the posterior probability for compromised P(compromised | test password) 
+% calculation of the later probability for compromised P(compromised | test password) 
 nbc_compromised = p_compromised;
 
 for i = 1:length(probs_compromised)
     nbc_compromised = nbc_compromised * probs_compromised(i);
 end
 
-% calculation of the posterior probability for strong P(strong | test password) 
+% calculation of the later probability for strong P(strong | test password) 
 nbc_strong = p_strong;
 for i = 1:length(probs_strong)
     nbc_strong = nbc_strong * probs_strong(i);

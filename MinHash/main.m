@@ -11,6 +11,8 @@ k = 200;
 shingleSize = 3;
 compromisedSignatures = GetSignatures(compromised, k, shingleSize);
 
+save('MinHashSignatures.mat', 'compromisedSignatures', 'compromised')
+
 inputPasword = "p4ssw0rdStr@ng";
 threshold = 0.5;
 
