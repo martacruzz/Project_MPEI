@@ -65,7 +65,7 @@ disp("--------------------------")
 
 
 % test password
-test_password = "[strP4ssw0rd!@";
+test_password = "[strP4ssw0rd@";
 allChars_test = strjoin(test_password, '');
 chars_test = unique(char(allChars_test));
 
