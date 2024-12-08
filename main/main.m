@@ -116,7 +116,7 @@ if ~isempty(similars)
     disp('Your password is not compromised, however consider changing it to something more unique.')
 else
 
-    disp('Good job, your password is not compromised and no similar passwords found.')
+    disp('Good job, your password is not compromised and no similar passwords were found.')
 
 end
 
