@@ -1,0 +1,4 @@
+% NAIVE BAYES TESTS
+
+% load the trained modle
+load('trainedNaiveBayes.mat');
