@@ -12,26 +12,3 @@ shingleSize = 3;
 compromisedSignatures = GetSignatures(compromised, k, shingleSize);
 
 save('MinHashSignatures.mat', 'compromisedSignatures', 'compromised')
-
-inputPasword = "p4ssw0rdStr@ng";
-threshold = 0.5;
-
-inputSignature = GetSignatures(inputPasword, k, shingleSize);
-
-% calculate Jaccard distances between input password and compromised
-% passwords
-[similarities, similars] = GetSimilarities(compromised, compromisedSignatures, inputSignature, threshold, k);
-
-% display similar passwords
-if ~isempty(similars)
-
-    fprintf('Similar passwords found:\n');
-    for i = 1:length(similars)
-        fprintf('%2d. %s\n', i, similars{i}); % Display index and password
-    end
-
-else
-
-    fprintf('No similar passwords found.\n');
-
-end
