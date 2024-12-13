@@ -9,12 +9,8 @@ load MinHashSignatures.mat
 userPassword = input('Enter your password: ', 's');
 
 % check if input is not an empty string
-while userPassword == ""
-   
-    disp("Please input a valid (non-null) password!")
-    userPassword = input('Enter your password: ', 's');
-
-end
+if userPassword == ""
+    disp("Please input a valid (non-null) ")
 
 %% apply Bloom filter to check if password inputted is in compromised passwords. if so -> mark it as compromised immediatly
 k = 10;
@@ -22,7 +18,7 @@ bloomfilterResult = is_in_BloomFilter(BloomFilter, userPassword, k);
 
 if bloomfilterResult == 1
    
-    disp('Bloom Filter -> Your password is compromised! Better change it now.')
+    disp('Your password is compromised! Better change it now.')
     return
     
 end
@@ -98,7 +94,7 @@ for i = 1:length(probs_strong)
 end
 
 if (nbc_compromised > nbc_strong)
-    disp("Naive Bayes -> Your password is most likely compromised. Better change it!")
+    disp("Your password is most likely compromised. Better change it!")
     return
 end
 
@@ -121,10 +117,10 @@ if ~isempty(similars)
     for i = 1:length(similars)
         fprintf('%2d. %s\n', i, similars{i}); % Display index and password
     end
-    disp('MinHash -> Your password is not compromised, however consider changing it to something more unique.')
+    disp('Your password is not compromised, however consider changing it to something more unique.')
 else
 
-    disp('MinHash -> Good job, your password is not compromised and no similar passwords were found.')
+    disp('Good job, your password is not compromised and no similar passwords were found.')
 
 end
 

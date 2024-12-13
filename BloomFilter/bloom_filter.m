@@ -18,4 +18,4 @@ for i = 1:length(common_passwords)
 end
 
 
-save('BloomFilter_model.mat', 'BloomFilter', 'n', 'k');
+save('BloomFilter.mat', 'BloomFilter', 'n', 'k');
