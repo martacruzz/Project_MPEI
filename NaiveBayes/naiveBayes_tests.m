@@ -1,4 +1,4 @@
-% NAIVE BAYES TESTS
+P% NAIVE BAYES TESTS
 
 % load the trained model
 load('trainedNaiveBayes.mat');
