@@ -16,20 +16,26 @@ while userPassword == ""
 
 end
 
+disp(' ')
+disp("--------------------------")
+disp(' ')
 %% apply Bloom filter to check if password inputted is in compromised passwords. if so -> mark it as compromised immediatly
 k = 10;
 bloomfilterResult = is_in_BloomFilter(BloomFilter, userPassword, k);
 
 if bloomfilterResult == 1
-   
     disp('Bloom Filter -> Your password is compromised! Better change it now.')
-    return
     
+else
+    disp('Bloom Filter -> Your password is not compromised, great!')
 end
+
+disp(' ')
 
 %% if not -> apply Naive Bayes to check the probability of password being compromised
 
 disp("--------------------------")
+disp(' ')
 
 userPassword = convertCharsToStrings(userPassword); % convert array of chars to string
 
@@ -82,7 +88,7 @@ for i = 1:length(chars_test)
 
 end
 
-disp("--------------------------")
+disp(' ')
 
 % calculation of the later probability for compromised P(compromised | test password) 
 nbc_compromised = p_compromised;
@@ -99,9 +105,13 @@ end
 
 if (nbc_compromised > nbc_strong)
     disp("Naive Bayes -> Your password is most likely compromised. Better change it!")
-    return
+else
+    disp("Naive Bates -> Your password is not compromised, great!")
 end
 
+disp(' ')
+disp("--------------------------")
+disp(' ')
 %% and apply MinHash to see if any similarities are found
 
 threshold = 0.5;
@@ -121,6 +131,7 @@ if ~isempty(similars)
     for i = 1:length(similars)
         fprintf('%2d. %s\n', i, similars{i}); % Display index and password
     end
+    disp(' ')
     disp('MinHash -> Your password is not compromised, however consider changing it to something more unique.')
 else
 
@@ -128,4 +139,4 @@ else
 
 end
 
-
+disp(' ')
