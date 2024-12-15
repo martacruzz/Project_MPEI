@@ -1,16 +1,29 @@
-P% NAIVE BAYES TESTS
+% NAIVE BAYES TESTS
 
-% load the trained model
+% load the trained model and the scripts with the passwords
 load('trainedNaiveBayes.mat');
 
-% list of test passwords
-test_passwords = {
-    '123456', 'compromised';
-    'password', 'compromised';
-    '!.acGSp|jPkI', 'strong';
-    'trustno1', 'compromised';
-    'Unbr3akable3!', 'strong';
-    };
+common_passwords = readlines('common_passwords.txt');
+strong_passwords = readlines('strong_passwords.txt');
+
+% select 5% of each group
+num_common = round(length(common_passwords) * 0.05);
+num_strong = round(length(strong_passwords) * 0.05);
+
+common_sample = common_passwords(randperm(length(common_passwords), num_common));
+strong_sample = strong_passwords(randperm(length(strong_passwords), num_strong));
+
+% add passwords that don't belong to any group
+external_passwords = {'TotallyNew#Pass'; 'Unkown@Password'; 'NotInList123'};
+
+% combine the three samples to the test
+test_passwords = [common_sample; strong_sample; external_passwords];
+
+% create true labels for the test_passwords
+true_labels = [repmat("compromised", num_common, 1); 
+               repmat("strong", num_strong, 1); 
+               repmat("strong", length(external_passwords), 1)];
+
 
 true_positive = 0;
 true_negative = 0;
@@ -22,17 +35,16 @@ disp('------------------ STARTING TESTS ------------------');
 disp(' ')
 
 % loop for each password of test_passwords
-for i = 1:size(test_passwords, 1)
+for i = 1:length(test_passwords)
     
-    test_password = test_passwords(i, 1);
-    true_label = test_passwords{i, 2};
-
-    allChars_test = strjoin(test_password, '');
-    chars_test = unique(char(allChars_test));
+    test_password = char(test_passwords{i});
+    true_label = true_labels{i};
+    
+    chars_test = unique(test_password);
     
     probs_compromised = zeros(length(chars_test), 1); 
 
-    fprintf('Passowrd: %s \n', string(test_password))
+    fprintf('Passowrd: %s  ------------  ', string(test_password))
     
     % calculate probabilities for 'compromised'
     for j = 1:length(chars_test)
@@ -47,11 +59,8 @@ for i = 1:size(test_passwords, 1)
         char_count = sum(occurences_compromised(:, index)); 
         prob = (char_count + 1) / (sum(sum(occurences_compromised)) + length(chars));
         probs_compromised(j) = prob;
-
-        fprintf("P(%c | compromised) = %.6f\n", chars_test(j), prob)
     end
 
-    
     probs_strong = zeros(length(chars_test), 1);
     
     % calculate probabilities for 'strong'
@@ -68,8 +77,6 @@ for i = 1:size(test_passwords, 1)
         char_count = sum(occurences_strong(:, index)); 
         prob = (char_count + 1) / (sum(sum(occurences_strong)) + length(chars));
         probs_strong(j) = prob;
-
-        fprintf("P(%c | strong) = %.4f\n", chars_test(j), prob);
     end
     
     % calculate the posterior probability for 'compromised'
@@ -109,18 +116,9 @@ for i = 1:size(test_passwords, 1)
 
     fprintf('Predicted: %s   -->   True one: %s \n', string(predicted_label), true_label)
 
-
-    if strcmp(predicted_label, 'compromised')
-        disp('Your password is most likely compromised. Better change it!');
-    else
-        disp('Good job, you have a strong password. It is most likely not compromised.');
-    end
-
-    
-    disp(' ')
-    disp("--------------------------")
-    disp(' ')
 end
+
+disp(' ')
 
 % calculate performance metrics
 accuracy = (true_positive + true_negative) / size(test_passwords, 1);
