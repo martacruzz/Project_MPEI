@@ -1,16 +1,24 @@
 % BLOOM FILTER TESTS
 
-% load the trained model
-load('BloomFilter_model.mat');
+% load the trained model and the scripts with the passwords
+load('BloomFilter.mat');
 
-% list of test passwords
-test_passwords = {
-    '123456', 'compromised';
-    'banana', 'compromised';
-    '!,~zMu]"+:|m', 'strong';
-    'unknown123', 'strong';
-    'paris', 'compromised';
-    };
+common_passwords = readlines('common_passwords.txt');
+strong_passwords = readlines('strong_passwords.txt');
+
+% select 5% of each group
+num_common = round(length(common_passwords) * 0.05);
+num_strong = round(length(strong_passwords) * 0.05);
+
+common_sample = datasample(common_passwords, num_common, 'Replace', false);
+strong_sample = datasample(strong_passwords, num_strong, 'Replace', false);
+
+% add passwords that don't belong to any group
+external_passwords = {'TotallyNew#Pass'; 'Unkown@Password'; 'NotInList123'};
+
+% combine the three samples to the test
+test_passwords = [common_sample; strong_sample; external_passwords];
+
 
 true_positive = 0;
 true_negative = 0;
@@ -22,19 +30,25 @@ disp('------------------ STARTING TESTS ------------------');
 disp(' ')
 
 % loop for each password
-for i = 1:size(test_passwords, 1)
-    test_password = test_passwords{i, 1};
-    true_label = test_passwords{i, 2};
+for i = 1:length(test_passwords)
+    test_password = test_passwords{i};
     
     % check if the password is in the Bloom Filter
     is_compromised = is_in_BloomFilter(BloomFilter, test_password, k);
 
-    fprintf('Password: %s\n', test_password);
+    fprintf('Password: %s  ->  ', test_password);
+    
+    if ismember(test_password, common_passwords)
+        true_label = 'compromised';
+    else
+        true_label = 'strong';
+    end
+
 
     if is_compromised
-        fprintf('Result: Compromised \n');
+        fprintf('compromised');
     else
-        fprintf('Resultado: No compromised \n');
+        fprintf('no compromised');
     end
 
 
@@ -53,6 +67,8 @@ for i = 1:size(test_passwords, 1)
 
     disp(' ');
 end
+
+disp(' ')
 
 % calculate performance metrics
 accuracy = (true_positive + true_negative) / size(test_passwords, 1);
